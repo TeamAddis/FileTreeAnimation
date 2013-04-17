@@ -1,0 +1,5 @@
+enum FileType
+{
+    ASCII,
+    FOLDER,
+};

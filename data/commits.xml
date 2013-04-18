@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<git>
+<commit id="0">
+	<file>.gitattributes</file>
+	<file>.gitignore</file>
+</commit>
+<commit id="1">
+	<file>Character.pde</file>
+	<file>CharacterBody.pde</file>
+	<file>CharacterFactory.pde</file>
+	<file>CharacterHair.pde</file>
+	<file>CharacterHead.pde</file>
+	<file>README.txt</file>
+	<file>characterCreatorExample.pde</file>
+</commit>
+<commit id="2">
+	<file>data/body_1.png</file>
+	<file>data/body_2.png</file>
+	<file>data/body_3.png</file>
+	<file>data/hair_1.png</file>
+	<file>data/hair_2.png</file>
+	<file>data/hair_3.png</file>
+	<file>data/head_1.png</file>
+	<file>data/head_2.png</file>
+	<file>data/head_3.png</file>
+</commit>
+<commit id="3">
+	<file>data/textures.txt</file>
+</commit>
+<commit id="4">
+	<file>application.macosx/characterCreatorExample.app/Contents/Info.plist</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/MacOS/JavaApplicationStub</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/PkgInfo</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/characterCreatorExample.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/core.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/body_1.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/body_2.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/body_3.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/hair_1.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/hair_2.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/hair_3.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/head_1.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/head_2.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/head_3.png</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/data/textures.txt</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/gluegen-rt-natives-macosx-universal.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/gluegen-rt.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/jogl-all-natives-macosx-universal.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/jogl-all.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/Java/sprites.jar</file>
+	<file>application.macosx/characterCreatorExample.app/Contents/Resources/sketch.icns</file>
+	<file>application.macosx/readme.txt</file>
+	<file>application.macosx/source/Character.pde</file>
+	<file>application.macosx/source/CharacterBody.pde</file>
+	<file>application.macosx/source/CharacterFactory.pde</file>
+	<file>application.macosx/source/CharacterHair.pde</file>
+	<file>application.macosx/source/CharacterHead.pde</file>
+	<file>application.macosx/source/characterCreatorExample.java</file>
+	<file>application.macosx/source/characterCreatorExample.pde</file>
+</commit>
+</git>

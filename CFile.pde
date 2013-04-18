@@ -1,35 +1,39 @@
 class CFile 
 {
-  ArrayList<CFile> files;
+  private String name;                                     // the name of the file.
+  FileType type;                                   // the file type.
+  ObjectInputState inputState;                    // the inpute state of the object.
+  
+  ArrayList<CFile> files;                          // list of children files.
+  
+  color col;                                       // the color.
   
   // We need to keep track of a Body and a radius
   Body body;
   float r;
   
-  color col;    // the normal color.
-  
-  private FileType type;
-  
-  public CFile(float x, float y, boolean isStatic) 
+  public CFile(String name) 
   {
-    r = 8;
-    type = FileType.ASCII;
+    this.name = name;
+    this.r = (25/2);
+    this.type = FileType.ASCII;
+    this.inputState = ObjectInputState.NONE;
     
-    files = new ArrayList<CFile>();
+    this.files = new ArrayList<CFile>();
     
+    
+
+    
+  }
+  
+  public void createBody(float x, float y, BodyType type)
+  {
     // Define a body
     BodyDef bd = new BodyDef();
     // Set its position
     bd.position = box2d.coordPixelsToWorld(x,y);
-    if (isStatic)
-    {
-      bd.type = BodyType.STATIC;
-    }
-    else
-    {
-      bd.type = BodyType.DYNAMIC;
-    }
-    body = box2d.world.createBody(bd);
+    bd.type = type;
+    this.body = box2d.world.createBody(bd);
 
     // Make the body's shape a circle
     CircleShape cs = new CircleShape();
@@ -43,18 +47,18 @@ class CFile
     fd.restitution = 0.5;
     
     // Attach fixture to body
-    body.createFixture(fd);
-    body.setLinearVelocity(new Vec2(random(-1, 1), random(1, 2)));
-
-    
+    this.body.createFixture(fd);
+    this.body.setLinearVelocity(new Vec2(random(-1, 1), random(1, 2)));
   }
   
   private void pickColor()
   {
+    // check for file type.
     switch (this.type)
     {
       case ASCII:
       {
+        // set the normal color of an ascii file.
         col = color(0xffB2B2B2);
         return;
       }
@@ -63,11 +67,34 @@ class CFile
         col = color(0xffff0000);
         return;
       }
-      default:
-      {
-        return;
-      }
+      default:{return;}
     }
+  }
+  
+  void checkInputState()
+  {
+    switch (this.inputState)
+        {
+          case NONE:
+          {
+            // use this so we can reset the input state.
+            return;
+          }
+          case HOVER:
+          {
+            this.col = color(0xff96FF00);
+            for (CFile file : files)
+            {
+              file.col = color(0xffffff00);
+            }
+            return;
+          }
+          case SELECTED:
+          {
+            return;
+          }
+          default:{return;}
+        }
   }
 
   // This function removes the particle from the box2d world
@@ -110,13 +137,11 @@ class CFile
     translate(pos.x,pos.y);
     rotate(a);
     pickColor();
+    checkInputState();
     fill(col);
     noStroke();
     strokeWeight(1);
     ellipse(0,0,r*2,r*2);
-    // Let's add a line so we can see the rotation
-    stroke(0);
-    line(0,0,r,0);
     popMatrix();
   }
   
@@ -178,4 +203,9 @@ class CFile
     boolean inside = f.testPoint(worldPoint);
     return inside;
   }
+  
+  /*
+  **  Getters and Setters for private variables.
+  */
+  public String name() {return name;}
 }

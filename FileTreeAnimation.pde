@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import pbox2d.*;
 import org.jbox2d.common.*;
 import org.jbox2d.collision.shapes.*;
@@ -5,9 +6,10 @@ import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.*;
 
 PBox2D box2d;
+ArrayList<CCommit> commits;
+CFileTree tree;
 
-CFile topLevelDir;
-ArrayList<CFile> files;
+CButton nextButton;
 
 void setup()
 {
@@ -17,76 +19,107 @@ void setup()
   box2d = new PBox2D(this);
   box2d.createWorld();
   box2d.setGravity(0, 0);
-  files = new ArrayList<CFile>();
   
-  topLevelDir = new CFile(width/2, height/2, true);
-  files.add(topLevelDir);
+  commits = new ArrayList<CCommit>();
+  load();
+  tree = null;
   
-  // add a files to the top level directory.
-  addTestFiles(topLevelDir);
+  nextButton = new CButton("Next", new PVector(width/2, 20), 50, 25);
   
-  println(files.size());
-}
-
-void addTestFiles(CFile parent)
-{
-  // add a files to the top level directory.
-  Vec2 pos = box2d.getBodyPixelCoord(parent.body);
-  for (int i = 0; i < 5; i++)
-  {
-    CFile file = new CFile(pos.x, pos.y, false);
-    files.add(file);
-    
-    if (i == 3 || i == 4)
-    {
-      // make a new directory.
-      // and add new files.
-      for (int k = 0; k < 2; k++)
-      {
-        CFile f = new CFile(pos.x, pos.y, false);
-        files.add(f);
-        file.addFile(f);
-      }
-    }
-    // add the file to the parent.
-    parent.addFile(file);
-  }
+  drawFirstCommit();
 }
 
 void draw()
 {
   background(0);
-  
   box2d.step();
   
-  topLevelDir.display();
+  tree.display();
   
-  applyForces();
+  gui();
+}
+
+void gui()
+{
+  nextButton.display();
 }
 
 void mouseMoved()
-{
-  color hoverColor;     // the hover color.
-  for (CFile file : files)
+{ 
+  Iterator it = tree.fileIt();
+  while (it.hasNext())
   {
+    CFile file = (CFile)it.next();
+    
     if (file.contains(mouseX, mouseY))
     {
-      
+      file.inputState = ObjectInputState.HOVER;
+    }
+    else
+    {
+      file.inputState = ObjectInputState.NONE;
     }
   }
 }
 
-void applyForces()
+void mouseClicked()
 {
-  for (CFile file : files)
+  nextButton.buttonWasPressed(mouseX, mouseY);
+}
+
+void load()
+{
+  println("loading xml....");
+  XML xml = loadXML("commits.xml");
+  XML[] commitElements = xml.getChildren("commit");
+  
+  for (int i = 0; i < commitElements.length; i++)
   {
-    for (CFile f : files)
+    println("parsing commit.");
+    XML commitElement = commitElements[i];
+    CCommit commit = new CCommit(commitElement.getInt("id"));
+    
+    XML[] fileElements = commitElement.getChildren("file");
+    for (int k = 0; k < fileElements.length; k++)
     {
-      if (file != f)
+      println("parsing commit files.");
+      CFile file = new CFile(fileElements[k].getContent());
+      commit.addFile(file);
+    }
+    
+    commits.add(commit);
+  }
+  
+  println("done loading xml.");
+}
+
+void drawFirstCommit()
+{
+  println("loading first commit.");
+  
+  // create the file tree for the project.
+  tree = new CFileTree("Test Project");
+  CFile parent = new CFile("Test Project");
+  parent.createBody(width/2, height/2, BodyType.STATIC);
+  tree.setup(parent);
+  
+  
+  // get the first commit.
+  for (CCommit commit : commits)
+  {
+    if (commit.id() == 0)
+    {
+      Vec2 parentPos = box2d.getBodyPixelCoord(parent.body);
+      
+      Iterator it = commit.fileIt();
+      while (it.hasNext())
       {
-        file.push(f);
+        CFile file = (CFile)it.next();
+        file.createBody(parentPos.x, parentPos.y, BodyType.DYNAMIC);
+        tree.addFile("Test Project", file);
+        println(file.name());
       }
     }
   }
+  
 }
-

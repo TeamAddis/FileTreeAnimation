@@ -1,5 +1,0 @@
-enum FileType
-{
-    ASCII,
-    FOLDER,
-};

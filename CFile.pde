@@ -20,10 +20,6 @@ class CFile
     this.inputState = ObjectInputState.NONE;
     
     this.files = new ArrayList<CFile>();
-    
-    
-
-    
   }
   
   public void createBody(float x, float y, BodyType type)
@@ -120,8 +116,6 @@ class CFile
   {
     // We look at each body and get its screen position
     Vec2 pos = box2d.getBodyPixelCoord(body);
-    // Get its angle of rotation
-    float a = body.getAngle();
     
     for (CFile f : files)
     {
@@ -135,13 +129,15 @@ class CFile
     
     pushMatrix();
     translate(pos.x,pos.y);
-    rotate(a);
     pickColor();
     checkInputState();
     fill(col);
     noStroke();
     strokeWeight(1);
     ellipse(0,0,r*2,r*2);
+    
+    fill(col);
+    text(name, r*2, -r*2);
     popMatrix();
   }
   
@@ -161,7 +157,7 @@ class CFile
     djd.bodyB = f.body;
     
     // equilibrium length
-    djd.length = box2d.scalarPixelsToWorld(50.0f);
+    djd.length = box2d.scalarPixelsToWorld(100.0f);
     
     // spring properties
     djd.frequencyHz = 2.5;

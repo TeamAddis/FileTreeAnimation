@@ -14,22 +14,52 @@ public class CFileTree
   public void setup(CFile topLevelDir)
   {
     parent = topLevelDir;
+    files.add(parent);
   }
 
   public void display()
-  {
-    if (parent == null) {return;}
-    
+  {    
     parent.display();
     applyForces();
+  }
+  
+  private boolean exists(CFile file)
+  {
+    boolean flag = false;
+    for (CFile f : files)
+    {
+      if (f == file)
+      {
+        flag = true;
+        break;
+      }
+    }
+    return flag;
   }
 
   public void addFile(String parentName, CFile fileToAdd)
   {
+    if (exists(fileToAdd))
+    {
+      return;
+    }
+    
     for (CFile parent : files)
     {
-      
+      if (match(parent.name(), stringToRegular(parentName)) != null)
+      {
+        Vec2 parentPos = box2d.getBodyPixelCoord(parent.body);
+        fileToAdd.createBody(parentPos.x, parentPos.y, BodyType.DYNAMIC);
+        parent.addFile(fileToAdd);
+      }
+      else
+      {
+        Vec2 parentPos = box2d.getBodyPixelCoord(this.parent.body);
+        fileToAdd.createBody(parentPos.x, parentPos.y, BodyType.DYNAMIC);
+        this.parent.addFile(fileToAdd);
+      }
     }
+    files.add(fileToAdd);
   }
 
   void applyForces()

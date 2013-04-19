@@ -7,6 +7,7 @@ import org.jbox2d.dynamics.joints.*;
 
 PBox2D box2d;
 ArrayList<CCommit> commits;
+int prevCommitId;
 CFileTree tree;
 
 CButton nextButton;
@@ -32,6 +33,7 @@ void setup()
 void draw()
 {
   background(0);
+  noSmooth();
   box2d.step();
   
   tree.display();
@@ -109,17 +111,66 @@ void drawFirstCommit()
   {
     if (commit.id() == 0)
     {
-      Vec2 parentPos = box2d.getBodyPixelCoord(parent.body);
+      prevCommitId = commit.id();
       
       Iterator it = commit.fileIt();
       while (it.hasNext())
       {
         CFile file = (CFile)it.next();
-        file.createBody(parentPos.x, parentPos.y, BodyType.DYNAMIC);
         tree.addFile("Test Project", file);
         println(file.name());
       }
     }
   }
-  
 }
+
+void drawNextCommit()
+{
+  int currId = prevCommitId + 1;
+  
+  for (CCommit commit : commits)
+  {
+    if (commit.id() == currId)
+    {
+      prevCommitId = commit.id();
+      
+      Iterator it = commit.fileIt();
+      while (it.hasNext())
+      {
+        CFile file = (CFile)it.next();
+        String fileName = file.name();
+        // println(fileName);
+        
+        String[] s = split(fileName, "/");
+        if (s.length > 1)
+        {
+          CFile parent = null;
+          for (int i = 0; i < s.length; i++)
+          {
+            CFile f = new CFile(s[i]);
+            
+            if (parent == null)
+            {
+              
+            }
+          }
+          parent = null;
+        }
+        else
+        {
+          tree.addFile(tree.name(), file);
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+

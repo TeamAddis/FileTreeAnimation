@@ -17,7 +17,11 @@ public class CButton
   {
     pushMatrix();
     rectMode(CENTER);
-    rect(x, y, w, h);
+    fill(255);
+    rect(x, y, w, h, 5);
+    fill(0);
+    textAlign(CENTER);
+    text(text, x, y+5);
     popMatrix();
   }
   
@@ -26,6 +30,7 @@ public class CButton
     if (contains(mX, mY))
     {
       println(text+" button was pressed.");
+      drawNextCommit();
     }
   }
   

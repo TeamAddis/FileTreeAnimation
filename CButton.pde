@@ -17,6 +17,7 @@ public class CButton
   {
     pushMatrix();
     rectMode(CENTER);
+    noStroke();
     fill(255);
     rect(x, y, w, h, 5);
     fill(0);

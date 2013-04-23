@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import java.util.HashSet;
 import pbox2d.*;
 import org.jbox2d.common.*;
 import org.jbox2d.collision.shapes.*;
@@ -30,22 +31,6 @@ void setup()
   drawFirstCommit();
 }
 
-void draw()
-{
-  background(0);
-  noSmooth();
-  box2d.step();
-
-  tree.display();
-
-  gui();
-}
-
-void gui()
-{
-  nextButton.display();
-}
-
 void mouseMoved()
 { 
   Iterator it = tree.fileIt();
@@ -69,6 +54,22 @@ void mouseClicked()
   nextButton.buttonWasPressed(mouseX, mouseY);
 }
 
+void draw()
+{
+  background(0);
+  noSmooth();
+  box2d.step();
+
+  tree.display();
+
+  gui();
+}
+
+void gui()
+{
+  nextButton.display();
+}
+
 void load()
 {
   println("loading xml....");
@@ -85,8 +86,7 @@ void load()
     for (int k = 0; k < fileElements.length; k++)
     {
       println("parsing commit files.");
-      CFile file = new CFile(fileElements[k].getContent());
-      commit.addFile(file);
+      commit.addFileName(fileElements[k].getContent());
     }
 
     commits.add(commit);
@@ -101,9 +101,6 @@ void drawFirstCommit()
 
   // create the file tree for the project.
   tree = new CFileTree("Test Project");
-  CFile parent = new CFile("Test Project");
-  parent.createBody(width/2, height/2, BodyType.STATIC);
-  tree.setup(parent);
 
 
   // get the first commit.
@@ -113,12 +110,12 @@ void drawFirstCommit()
     {
       prevCommitId = commit.id();
 
-      Iterator it = commit.fileIt();
+      Iterator it = commit.fileNameIt();
       while (it.hasNext ())
       {
-        CFile file = (CFile)it.next();
-        tree.addFile("Test Project", file);
-        println(file.name());
+        String s = (String)it.next();
+        
+        tree.addFileWithName(s);
       }
     }
   }
@@ -134,22 +131,13 @@ void drawNextCommit()
     {
       prevCommitId = commit.id();
 
-      Iterator it = commit.fileIt();
+      Iterator it = commit.fileNameIt();
       while (it.hasNext ())
       {
-        CFile file = (CFile)it.next();
+        String s = (String)it.next();
         
-        tree.addFileWithName(file.name());
+        tree.addFileWithName(s);
       }
     }
   }
 }
-
-
-
-
-
-
-
-
-

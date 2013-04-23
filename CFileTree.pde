@@ -1,115 +1,68 @@
 public class CFileTree
 {
-  private String name;
-  CFile parent;                                  // Top Level Directory.
-  CFile workingDirectory;                        // the current directory we are adding files to.
-  private ArrayList<CFile> files;                // contains all files in tree.
+  private ArrayList<CFile> files;
+  private CFile rootDirectory;
+  private CFile currentDirectory;
+  private String projectName;
 
-  public CFileTree(String projectName)
+  public CFileTree(String name)
   {
     files = new ArrayList<CFile>();
-    name = projectName;
-    parent = null;
-  }
-  
-  public void setup(CFile topLevelDir)
-  {
-    parent = topLevelDir;
-    workingDirectory = topLevelDir;
-    files.add(parent);
+    projectName = name;
+
+    // create the top level directory.
+    rootDirectory = new CFile(name, width/2, height/2, BodyType.STATIC);
+    files.add(rootDirectory);
+    currentDirectory = rootDirectory;
   }
 
-  public void display()
-  {    
-    parent.display();
-    applyForces();
-  }
-  
-  public boolean exists(String s)
-  {
-    boolean flag = false;
-    for (CFile f : files)
+  public void addFileWithName(String name)
+  { 
+    // split the string on '/' so we can follow the
+    // file path.
+    String[] s = name.split("/");
+    
+    // we want to start at root.
+    CFile workingDir = rootDirectory;
+    
+    for (int i = 0; i < s.length; i++)
     {
-      if (match(f.name(), s) != null)
+      String nextName = s[i];
+      if (!workingDir.exists(nextName))
       {
-        flag = true;
-        println("adding file... file already exsists, skipping.");
-        break;
+        // file doesn't exist, we need to create it.
+        Vec2 pos = box2d.getBodyPixelCoord(workingDir.body());
+        CFile nFile = new CFile(nextName, pos.x, pos.y, BodyType.DYNAMIC);
+        workingDir.addFile(nFile);
+        
+        // we also want to keep a reference to this file in the tree.
+        files.add(nFile);
+        println("added "+nextName+" to dir: "+workingDir.name());
+        workingDir = nFile;
       }
-    }
-    return flag;
-  }
-  
-  private void resetWorkingDir() {workingDirectory = parent;}
-  private void setWorkingDir(String name) 
-  {
-    if (name == null)
-    {
-      resetWorkingDir();
-    }
-    else
-    {
-      for (CFile f : files)
+      else
       {
-        if (match(f.name(), name) != null)
+        // file does exist. set it as working directory.
+        Iterator it = workingDir.fileIt();
+        while (it.hasNext())
         {
-          workingDirectory = f;
-          break;
+          CFile file = (CFile)it.next();
+          if (match(file.name(), nextName) != null)
+          {
+            workingDir = file;
+            break;
+          }
         }
       }
     }
   }
+
+  public void display()
+  {
+    currentDirectory.display();
+    applyForces();
+  }
   
-  public void addFileWithName(String name)
-  {
-    // split the file name so we can break up the path.
-    String[] s = name.split("/");
-    println(s);
-    
-    ArrayList newFiles = new ArrayList<CFile>();
-    for (int i = 0; i < s.length; i++)
-    {
-      // check to see if a file already exists with this name.
-      if (!exists(s[i])
-      {
-        // set the working directory.
-        
-        CFile newFile = new CFile(s[i]);
-        
-        // add file to its parent.
-        Vec2 pos = box2d.getBodyPixelCoord(workingDirectory.body);
-        
-        // add file to list of file in the tree.
-        newFiles.add(newFile);
-      }
-    }
-  }
-
-  public void addFile(String parentName, CFile fileToAdd)
-  {
-    if (exists(fileToAdd.name()))
-    {
-      return;
-    }
-    
-    for (CFile parent : files)
-    {
-      if (match(parent.name(), stringToRegular(parentName)) != null)
-      {
-        Vec2 parentPos = box2d.getBodyPixelCoord(parent.body);
-        fileToAdd.createBody(parentPos.x, parentPos.y, BodyType.DYNAMIC);
-        parent.addFile(fileToAdd);
-      }
-      else
-      {
-        Vec2 parentPos = box2d.getBodyPixelCoord(this.parent.body);
-        fileToAdd.createBody(parentPos.x, parentPos.y, BodyType.DYNAMIC);
-        this.parent.addFile(fileToAdd);
-      }
-    }
-    files.add(fileToAdd);
-  }
-
   void applyForces()
   {
     for (CFile file : files)
@@ -128,34 +81,7 @@ public class CFileTree
   **  Getters and Setters for private variables.
   */
   public Iterator fileIt() { return files.iterator(); }
-  public String name() { return name; }
+  public String name() { return projectName; }
   
-  /*
-  **  Test functions.
-  */
-  void addTestFiles(CFile parent)
-  {
-    // add a files to the top level directory.
-    Vec2 pos = box2d.getBodyPixelCoord(parent.body);
-    for (int i = 0; i < 5; i++)
-    {
-      CFile file = new CFile("test");
-      files.add(file);
-
-      if (i == 3 || i == 4)
-      {
-        // make a new directory.
-        // and add new files.
-        for (int k = 0; k < 2; k++)
-        {
-          CFile f = new CFile("test");
-          files.add(f);
-          file.addFile(f);
-        }
-      }
-      // add the file to the parent.
-      parent.addFile(file);
-    }
-  }
 }
 

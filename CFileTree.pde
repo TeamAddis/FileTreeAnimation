@@ -2,6 +2,7 @@ public class CFileTree
 {
   private String name;
   CFile parent;                                  // Top Level Directory.
+  CFile workingDirectory;                        // the current directory we are adding files to.
   private ArrayList<CFile> files;                // contains all files in tree.
 
   public CFileTree(String projectName)
@@ -14,6 +15,7 @@ public class CFileTree
   public void setup(CFile topLevelDir)
   {
     parent = topLevelDir;
+    workingDirectory = topLevelDir;
     files.add(parent);
   }
 
@@ -23,23 +25,69 @@ public class CFileTree
     applyForces();
   }
   
-  private boolean exists(CFile file)
+  public boolean exists(String s)
   {
     boolean flag = false;
     for (CFile f : files)
     {
-      if (f == file)
+      if (match(f.name(), s) != null)
       {
         flag = true;
+        println("adding file... file already exsists, skipping.");
         break;
       }
     }
     return flag;
   }
+  
+  private void resetWorkingDir() {workingDirectory = parent;}
+  private void setWorkingDir(String name) 
+  {
+    if (name == null)
+    {
+      resetWorkingDir();
+    }
+    else
+    {
+      for (CFile f : files)
+      {
+        if (match(f.name(), name) != null)
+        {
+          workingDirectory = f;
+          break;
+        }
+      }
+    }
+  }
+  
+  public void addFileWithName(String name)
+  {
+    // split the file name so we can break up the path.
+    String[] s = name.split("/");
+    println(s);
+    
+    ArrayList newFiles = new ArrayList<CFile>();
+    for (int i = 0; i < s.length; i++)
+    {
+      // check to see if a file already exists with this name.
+      if (!exists(s[i])
+      {
+        // set the working directory.
+        
+        CFile newFile = new CFile(s[i]);
+        
+        // add file to its parent.
+        Vec2 pos = box2d.getBodyPixelCoord(workingDirectory.body);
+        
+        // add file to list of file in the tree.
+        newFiles.add(newFile);
+      }
+    }
+  }
 
   public void addFile(String parentName, CFile fileToAdd)
   {
-    if (exists(fileToAdd))
+    if (exists(fileToAdd.name()))
     {
       return;
     }

@@ -16,17 +16,17 @@ void setup()
 {
   size(800, 800, P2D);
   smooth();
-  
+
   box2d = new PBox2D(this);
   box2d.createWorld();
   box2d.setGravity(0, 0);
-  
+
   commits = new ArrayList<CCommit>();
   load();
   tree = null;
-  
+
   nextButton = new CButton("Next", new PVector(width/2, 20), 50, 25);
-  
+
   drawFirstCommit();
 }
 
@@ -35,9 +35,9 @@ void draw()
   background(0);
   noSmooth();
   box2d.step();
-  
+
   tree.display();
-  
+
   gui();
 }
 
@@ -49,10 +49,10 @@ void gui()
 void mouseMoved()
 { 
   Iterator it = tree.fileIt();
-  while (it.hasNext())
+  while (it.hasNext ())
   {
     CFile file = (CFile)it.next();
-    
+
     if (file.contains(mouseX, mouseY))
     {
       file.inputState = ObjectInputState.HOVER;
@@ -74,13 +74,13 @@ void load()
   println("loading xml....");
   XML xml = loadXML("commits.xml");
   XML[] commitElements = xml.getChildren("commit");
-  
+
   for (int i = 0; i < commitElements.length; i++)
   {
     println("parsing commit.");
     XML commitElement = commitElements[i];
     CCommit commit = new CCommit(commitElement.getInt("id"));
-    
+
     XML[] fileElements = commitElement.getChildren("file");
     for (int k = 0; k < fileElements.length; k++)
     {
@@ -88,33 +88,33 @@ void load()
       CFile file = new CFile(fileElements[k].getContent());
       commit.addFile(file);
     }
-    
+
     commits.add(commit);
   }
-  
+
   println("done loading xml.");
 }
 
 void drawFirstCommit()
 {
   println("loading first commit.");
-  
+
   // create the file tree for the project.
   tree = new CFileTree("Test Project");
   CFile parent = new CFile("Test Project");
   parent.createBody(width/2, height/2, BodyType.STATIC);
   tree.setup(parent);
-  
-  
+
+
   // get the first commit.
   for (CCommit commit : commits)
   {
     if (commit.id() == 0)
     {
       prevCommitId = commit.id();
-      
+
       Iterator it = commit.fileIt();
-      while (it.hasNext())
+      while (it.hasNext ())
       {
         CFile file = (CFile)it.next();
         tree.addFile("Test Project", file);
@@ -127,44 +127,23 @@ void drawFirstCommit()
 void drawNextCommit()
 {
   int currId = prevCommitId + 1;
-  
+
   for (CCommit commit : commits)
   {
     if (commit.id() == currId)
     {
       prevCommitId = commit.id();
-      
+
       Iterator it = commit.fileIt();
-      while (it.hasNext())
+      while (it.hasNext ())
       {
         CFile file = (CFile)it.next();
-        String fileName = file.name();
-        // println(fileName);
         
-        String[] s = split(fileName, "/");
-        if (s.length > 1)
-        {
-          CFile parent = null;
-          for (int i = 0; i < s.length; i++)
-          {
-            CFile f = new CFile(s[i]);
-            
-            if (parent == null)
-            {
-              
-            }
-          }
-          parent = null;
-        }
-        else
-        {
-          tree.addFile(tree.name(), file);
-        }
+        tree.addFileWithName(file.name());
       }
     }
   }
 }
-
 
 
 

@@ -16,7 +16,6 @@ CButton nextButton;
 void setup()
 {
   size(800, 800, P2D);
-  smooth();
 
   box2d = new PBox2D(this);
   box2d.createWorld();
@@ -52,6 +51,21 @@ void mouseMoved()
 void mouseClicked()
 {
   nextButton.buttonWasPressed(mouseX, mouseY);
+  
+  Iterator it = tree.fileIt();
+  while(it.hasNext())
+  {
+    CFile file = (CFile)it.next();
+    if (file.contains(mouseX, mouseY))
+    {
+      file.inputState = ObjectInputState.SELECTED;
+      
+    }
+    else
+    {
+      file.inputState = ObjectInputState.NONE;
+    }
+  }
 }
 
 void draw()
@@ -61,7 +75,7 @@ void draw()
   box2d.step();
 
   tree.display();
-
+  
   gui();
 }
 

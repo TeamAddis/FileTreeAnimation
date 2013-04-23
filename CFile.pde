@@ -204,7 +204,7 @@ public class CFile
 
   public void push(CFile b)
   {
-    float G = 5;
+    float G = 1.1;
 
     Vec2 pos = body.getWorldCenter();
     Vec2 boxPos = b.body.getWorldCenter();
@@ -214,7 +214,7 @@ public class CFile
     float distance = force.length();
 
     // keep force within bounds.
-    distance = constrain(distance, 1, box2d.scalarPixelsToWorld(5.0f));
+    distance = constrain(distance, 1, box2d.scalarPixelsToWorld(20.0f));
     force.normalize();
 
     float strength = (G * body.m_mass * b.body.m_mass) / (distance * distance);

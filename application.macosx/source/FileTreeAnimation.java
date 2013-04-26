@@ -219,6 +219,7 @@ public void drawNextCommit()
   {
     if (commit.id() == currId)
     {
+      println("parsing commit number: "+currId);
       prevCommitId = commit.id();
 
       Iterator it = commit.fileNameIt();
@@ -233,6 +234,8 @@ public void drawNextCommit()
     if (commits.size() == currId)
     {
       timer.running = false;
+      println("no more commits found.");
+      return;
     }
   }
 }
@@ -430,6 +433,8 @@ public class CFile
         lineCol = color(0xff00FFDD);
         stroke(color(0xff96FF00));
         strokeWeight(3);
+        fill(col);
+        text(name, r*2, -r*2);
         for (CFile file : files)
         {
           file.inputState = ObjectInputState.HOVER;
@@ -447,8 +452,9 @@ public class CFile
   {
     // We look at each body and get its screen position
     Vec2 pos = box2d.getBodyPixelCoord(body);
-
-    for (CFile f : files)
+    
+    ArrayList<CFile> tmpFiles = new ArrayList(files);    
+    for (CFile f : tmpFiles)
     {
       // draw a line from the center of the parent
       // to the children.
@@ -467,8 +473,7 @@ public class CFile
     checkInputState();
     fill(col);
     ellipse(0, 0, r*2, r*2);
-    fill(col);
-    text(name, r*2, -r*2);
+    
     popMatrix();
   }
 
@@ -502,7 +507,7 @@ public class CFile
     // spring properties
     djd.frequencyHz = 2.5f;
     djd.dampingRatio = 0.9f;
-
+    
     DistanceJoint dj = (DistanceJoint)box2d.world.createJoint(djd);
 
     files.add(f);
@@ -519,7 +524,7 @@ public class CFile
 
   public void push(CFile b)
   {
-    float G = 1;
+    float G = 1.2f;
 
     Vec2 pos = body.getWorldCenter();
     Vec2 boxPos = b.body.getWorldCenter();
@@ -702,7 +707,7 @@ public class CommitTimer extends Thread
     {
       try
       {
-        sleep((long)(6000));
+        sleep((long)(10000));
       }
       catch (Exception e)
       {

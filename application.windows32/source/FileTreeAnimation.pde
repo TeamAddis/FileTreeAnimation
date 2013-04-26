@@ -194,6 +194,7 @@ void drawNextCommit()
   {
     if (commit.id() == currId)
     {
+      println("parsing commit number: "+currId);
       prevCommitId = commit.id();
 
       Iterator it = commit.fileNameIt();
@@ -208,6 +209,8 @@ void drawNextCommit()
     if (commits.size() == currId)
     {
       timer.running = false;
+      println("no more commits found.");
+      return;
     }
   }
 }

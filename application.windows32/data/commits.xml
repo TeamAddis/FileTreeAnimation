@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<git name="FileTreeAnimation">
+<commit id="0">
+	<file>.gitattributes</file>
+	<file>.gitignore</file>
+	<file>FileTreeAnimation.pde</file>
+</commit>
+<commit id="1">
+	<file>README.txt</file>
+</commit>
+<commit id="2">
+	<file>CFile.pde</file>
+	<file>FileTreeAnimation.pde</file>
+	<file>FileTypeEnum.java</file>
+</commit>
+<commit id="3">
+	<file>CButton.pde</file>
+	<file>CCommit.pde</file>
+	<file>CFile.pde</file>
+	<file>CFileTree.pde</file>
+	<file>Enums.java</file>
+	<file>FileTreeAnimation.pde</file>
+	<file>FileTypeEnum.java</file>
+	<file>data/commits.xml</file>
+</commit>
+<commit id="4">
+	<file>CButton.pde</file>
+	<file>Tools.pde</file>
+</commit>
+<commit id="5">
+	<file>CFile.pde</file>
+	<file>CFileTree.pde</file>
+	<file>FileTreeAnimation.pde</file>
+</commit>
+<commit id="6">
+	<file>CCommit.pde</file>
+	<file>CFileTree.pde</file>
+	<file>FileTreeAnimation.pde</file>
+</commit>
+<commit id="7">
+	<file>CButton.pde</file>
+	<file>CCommit.pde</file>
+	<file>CFile.pde</file>
+	<file>CFileTree.pde</file>
+	<file>FileTreeAnimation.pde</file>
+	<file>Tools.pde</file>
+</commit>
+<commit id="8">
+	<file>CFile.pde</file>
+	<file>FileTreeAnimation.pde</file>
+</commit>
+<commit id="9">
+	<file>CFile.pde</file>
+	<file>CFileTree.pde</file>
+	<file>CommitTimer.pde</file>
+	<file>Enums.java</file>
+	<file>FileTreeAnimation.pde</file>
+</commit>
+<commit id="10">
+	<file>data/commits.xml</file>
+	<file>gitLogToXML.sh</file>
+</commit>
+</git>

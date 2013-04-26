@@ -17,11 +17,13 @@ Textarea infoText;
 
 CommitTimer timer;
 
+String projectName;
+
 // CButton nextButton;
 
 void setup()
 {
-  size(800, 800, P2D);
+  size(displayWidth, displayHeight, P2D);
   
   ui = new ControlP5(this);
   infoText = ui.addTextarea("info")
@@ -133,6 +135,8 @@ void load()
   println("loading xml....");
   XML xml = loadXML("commits.xml");
   XML[] commitElements = xml.getChildren("commit");
+  XML root = commitElements[0].getParent();
+  projectName = root.getString("name");
 
   for (int i = 0; i < commitElements.length; i++)
   {
@@ -158,7 +162,7 @@ void drawFirstCommit()
   println("loading first commit.");
 
   // create the file tree for the project.
-  tree = new CFileTree("Test Project");
+  tree = new CFileTree(projectName);
 
 
   // get the first commit.
@@ -182,6 +186,8 @@ void drawFirstCommit()
 
 void drawNextCommit()
 {
+  tree.resetCurrentDirectory();
+  
   int currId = prevCommitId + 1;
 
   for (CCommit commit : commits)

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<git name=$name>
+<git name="FileTreeAnimation">
 <commit id="0">
 	<file>.gitattributes</file>
 	<file>.gitignore</file>
@@ -55,5 +55,9 @@
 	<file>CommitTimer.pde</file>
 	<file>Enums.java</file>
 	<file>FileTreeAnimation.pde</file>
+</commit>
+<commit id="10">
+	<file>data/commits.xml</file>
+	<file>gitLogToXML.sh</file>
 </commit>
 </git>

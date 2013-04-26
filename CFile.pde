@@ -128,8 +128,9 @@ public class CFile
   {
     // We look at each body and get its screen position
     Vec2 pos = box2d.getBodyPixelCoord(body);
-
-    for (CFile f : files)
+    
+    ArrayList<CFile> tmpFiles = new ArrayList(files);    
+    for (CFile f : tmpFiles)
     {
       // draw a line from the center of the parent
       // to the children.
@@ -200,7 +201,7 @@ public class CFile
 
   public void push(CFile b)
   {
-    float G = .5;
+    float G = 1;
 
     Vec2 pos = body.getWorldCenter();
     Vec2 boxPos = b.body.getWorldCenter();

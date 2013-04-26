@@ -18,7 +18,7 @@ public class CommitTimer extends Thread
     {
       try
       {
-        sleep((long)(40000));
+        sleep((long)(10000));
       }
       catch (Exception e)
       {

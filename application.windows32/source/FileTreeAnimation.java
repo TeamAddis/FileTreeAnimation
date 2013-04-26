@@ -524,7 +524,7 @@ public class CFile
 
   public void push(CFile b)
   {
-    float G = 1.2f;
+    float G = 1.15f;
 
     Vec2 pos = body.getWorldCenter();
     Vec2 boxPos = b.body.getWorldCenter();

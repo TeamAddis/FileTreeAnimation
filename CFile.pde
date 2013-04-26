@@ -111,6 +111,8 @@ public class CFile
         lineCol = color(0xff00FFDD);
         stroke(color(0xff96FF00));
         strokeWeight(3);
+        fill(col);
+        text(name, r*2, -r*2);
         for (CFile file : files)
         {
           file.inputState = ObjectInputState.HOVER;
@@ -149,8 +151,7 @@ public class CFile
     checkInputState();
     fill(col);
     ellipse(0, 0, r*2, r*2);
-    fill(col);
-    text(name, r*2, -r*2);
+    
     popMatrix();
   }
 
@@ -184,7 +185,7 @@ public class CFile
     // spring properties
     djd.frequencyHz = 2.5;
     djd.dampingRatio = 0.9;
-
+    
     DistanceJoint dj = (DistanceJoint)box2d.world.createJoint(djd);
 
     files.add(f);
@@ -201,7 +202,7 @@ public class CFile
 
   public void push(CFile b)
   {
-    float G = 1;
+    float G = 1.2;
 
     Vec2 pos = body.getWorldCenter();
     Vec2 boxPos = b.body.getWorldCenter();

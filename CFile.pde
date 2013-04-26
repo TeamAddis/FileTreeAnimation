@@ -10,7 +10,8 @@ public class CFile
   private color lineCol;
 
   private Body body;
-  private float r;
+  private BodyDef bd;
+  private float r;                               
 
   public CFile(String name, float x, float y, BodyType type)
   {
@@ -18,10 +19,10 @@ public class CFile
     files = new ArrayList<CFile>();
     this.type = FileType.ASCII;
     inputState = ObjectInputState.NONE;
-    r = (25/2);
+    r = (10/2);
 
     // Define a body.
-    BodyDef bd = new BodyDef();
+    bd = new BodyDef();
 
     // set its position.
     bd.position = box2d.coordPixelsToWorld(x, y);
@@ -116,10 +117,6 @@ public class CFile
         }
         return;
       }
-    case SELECTED:
-      {
-        return;
-      }
     default:
       {
         return;
@@ -151,7 +148,6 @@ public class CFile
     checkInputState();
     fill(col);
     ellipse(0, 0, r*2, r*2);
-
     fill(col);
     text(name, r*2, -r*2);
     popMatrix();
@@ -182,7 +178,7 @@ public class CFile
     djd.bodyB = f.body;
 
     // equilibrium length
-    djd.length = box2d.scalarPixelsToWorld(100.0f);
+    djd.length = box2d.scalarPixelsToWorld(50.0f);
 
     // spring properties
     djd.frequencyHz = 2.5;
@@ -204,7 +200,7 @@ public class CFile
 
   public void push(CFile b)
   {
-    float G = 1.1;
+    float G = .5;
 
     Vec2 pos = body.getWorldCenter();
     Vec2 boxPos = b.body.getWorldCenter();
@@ -237,6 +233,7 @@ public class CFile
   public String name() {
     return name;
   }
+  public int numChildren() {return files.size();}
   public Iterator fileIt() {
     return files.iterator();
   }
@@ -245,6 +242,25 @@ public class CFile
   }
   public void col(color c) {
     col = c;
+  }
+  public String typeAsString()
+  {
+    // check for file type.
+    switch (this.type)
+    {
+    case ASCII:
+      {
+        return "ascii";
+      }
+    case FOLDER:
+      {
+        return "folder";
+      }
+    default:
+      {
+        return "";
+      }
+    }
   }
 }
 

@@ -5,18 +5,34 @@ import org.jbox2d.common.*;
 import org.jbox2d.collision.shapes.*;
 import org.jbox2d.dynamics.*;
 import org.jbox2d.dynamics.joints.*;
+import controlP5.*;
 
 PBox2D box2d;
 ArrayList<CCommit> commits;
 int prevCommitId;
 CFileTree tree;
 
-CButton nextButton;
+ControlP5 ui;
+Textarea infoText;
+
+CommitTimer timer;
+
+// CButton nextButton;
 
 void setup()
 {
   size(800, 800, P2D);
-
+  
+  ui = new ControlP5(this);
+  infoText = ui.addTextarea("info")
+                .setPosition(10, 10)
+                .setSize(200, 400)
+                .setFont(createFont("arial",16))
+                .setLineHeight(20)
+                .setColor(color(0xffffffff))
+                .setColorBackground(color(155));
+  hideInfoText();
+  
   box2d = new PBox2D(this);
   box2d.createWorld();
   box2d.setGravity(0, 0);
@@ -25,7 +41,8 @@ void setup()
   load();
   tree = null;
 
-  nextButton = new CButton("Next", new PVector(width/2, 20), 50, 25);
+  // nextButton = new CButton("Next", new PVector(width/2, 20), 50, 25);
+  timer = new CommitTimer();
 
   drawFirstCommit();
 }
@@ -50,7 +67,9 @@ void mouseMoved()
 
 void mouseClicked()
 {
-  nextButton.buttonWasPressed(mouseX, mouseY);
+  tree.resetCurrentDirectory();
+  hideInfoText();
+  clearInfoText();
   
   Iterator it = tree.fileIt();
   while(it.hasNext())
@@ -58,12 +77,8 @@ void mouseClicked()
     CFile file = (CFile)it.next();
     if (file.contains(mouseX, mouseY))
     {
-      file.inputState = ObjectInputState.SELECTED;
-      
-    }
-    else
-    {
-      file.inputState = ObjectInputState.NONE;
+      tree.currentDirectory(file);
+      updateInfoText(file);
     }
   }
 }
@@ -72,16 +87,45 @@ void draw()
 {
   background(0);
   noSmooth();
+  
   box2d.step();
 
   tree.display();
-  
-  gui();
 }
 
-void gui()
+void updateInfoText(CFile file)
 {
-  nextButton.display();
+  clearInfoText();
+  
+  if (!infoText.isVisible())
+  {
+    showInfoText();
+  }
+  
+  String info = "Project name: "+"\n"+
+                "   "+tree.name()+"\n"+
+                "\n"+
+                "\n"+
+                "Filename: "+file.name()+"\n"+
+                "File type: "+file.typeAsString()+"\n"+
+                "Number of children: "+file.numChildren()+"\n"
+                ;
+  infoText.setText(info);
+}
+
+void clearInfoText()
+{
+  infoText.setText("");
+}
+
+void hideInfoText()
+{
+  infoText.hide();
+}
+
+void showInfoText()
+{
+  infoText.show();
 }
 
 void load()
@@ -133,6 +177,7 @@ void drawFirstCommit()
       }
     }
   }
+  timer.start();
 }
 
 void drawNextCommit()
@@ -152,6 +197,11 @@ void drawNextCommit()
         
         tree.addFileWithName(s);
       }
+    }
+    
+    if (commits.size() == currId)
+    {
+      timer.running = false;
     }
   }
 }

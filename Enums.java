@@ -10,5 +10,4 @@ enum ObjectInputState
 {
   NONE,
   HOVER,
-  SELECTED,
 };

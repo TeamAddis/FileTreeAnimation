@@ -21,10 +21,10 @@ public class CFileTree
     // split the string on '/' so we can follow the
     // file path.
     String[] s = name.split("/");
-    
+
     // we want to start at root.
     CFile workingDir = rootDirectory;
-    
+
     for (int i = 0; i < s.length; i++)
     {
       String nextName = s[i];
@@ -34,7 +34,7 @@ public class CFileTree
         Vec2 pos = box2d.getBodyPixelCoord(workingDir.body());
         CFile nFile = new CFile(nextName, pos.x, pos.y, BodyType.DYNAMIC);
         workingDir.addFile(nFile);
-        
+
         // we also want to keep a reference to this file in the tree.
         files.add(nFile);
         println("added "+nextName+" to dir: "+workingDir.name());
@@ -44,7 +44,7 @@ public class CFileTree
       {
         // file does exist. set it as working directory.
         Iterator it = workingDir.fileIt();
-        while (it.hasNext())
+        while (it.hasNext ())
         {
           CFile file = (CFile)it.next();
           if (match(file.name(), nextName) != null)
@@ -62,7 +62,7 @@ public class CFileTree
     currentDirectory.display();
     applyForces();
   }
-  
+
   void applyForces()
   {
     for (CFile file : files)
@@ -76,12 +76,24 @@ public class CFileTree
       }
     }
   }
-  
+
   /*
   **  Getters and Setters for private variables.
-  */
-  public Iterator fileIt() { return files.iterator(); }
-  public String name() { return projectName; }
-  
+   */
+  public Iterator fileIt() { 
+    return files.iterator();
+  }
+  public String name() { 
+    return projectName;
+  }
+  public CFile currentDirectory() {
+    return currentDirectory;
+  }
+  public void currentDirectory(CFile file) 
+  {
+    currentDirectory = file;
+    // currentDirectory.move(0,0);
+  }
+  public void resetCurrentDirectory() {currentDirectory = rootDirectory;}
 }
 
